@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In - Mood Tracking and Journaling Web App</title>
+</head>
+<body>
+    <header>
+        <h1>Welcome to the Mood Tracking and Journaling Web App</h1>
+    </header>
+    <main>
+        <h2>Log In</h2>
+        <form action="/api/user/login" method="POST">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required><br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required><br>
+            <button type="submit">Log In</button>
+        </form>
+        <p>Don't have an account? <a href="sign_up.html">Sign Up</a></p>
+    </main>
+    <footer>
+        <p>&copy; 2023 Mood Tracking and Journaling Web App. All rights reserved.</p>
+    </footer>
+</body>
+</html>
