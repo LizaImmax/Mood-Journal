@@ -4,14 +4,21 @@
     <h1>How are you feeling today?</h1>
 
     <form action="/save_mood_journal" method="POST">
+        <fieldset>
+            <div>
+                {{ form.mood.label(class="form-control-label") }}
+                {{ form.mood(class="form-control form-control-lg") }}
+            </div>
+            <div>
+                {{ form.journal.label(class="form-control-label") }}
+                {{ form.journal(class="form-control form-control-lg") }}
+            </div>
+
+        </fieldset>
+        
         <div>
-            <label for="mood">Your Mood:</label>
-            <input type="text" id="mood" name="mood" required>
+            {{ form.submit(class="btn btn-outline-info") }}
         </div>
-        <div>
-            <label for="journal_entry">Journal Entry:</label>
-            <textarea id="journal_entry" name="journal_entry" rows="4" required></textarea>
-        </div>
-        <button type="submit">Save</button>
+        
     </form>
 {% endblock %}

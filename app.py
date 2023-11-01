@@ -1,19 +1,14 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import login_user, login_required, logout_user, current_user
+from basemodel import RegistrationForm, Mood_JournalForm
+from config import app, db, bcrypt
+from models.mood_entry import MoodEntry
+from models.journal_entry import JournalEntry
+from models.user import User
 
-
-app = Flask(__name__)
-# app.secret_key = 'your_secret_key'  # Change this to a secure secret key
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://username:password@localhost/dbname'  # Replace with your database connection details
-
-#db = SQLAlchemy(app)
-
-# Define the User model for the database
-""" class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(80), nullable=False) """
+def get_current_user():
+    return current_user
 
 # Routes for your web app
 @app.route('/')
@@ -22,31 +17,25 @@ def index():
 
 @app.route('/sign_up', methods=['GET', 'POST'])
 def sign_up():
-    """if request.method == 'POST':
-        username = request.form['username']
-        email = request.form['email']
-        password = request.form['password']
-        user = User(username=username, email=email, password=password)
-        db.session.add(user)
-        db.session.commit()
-        # You can add user authentication and session management here
-        return redirect(url_for('index'))"""
-    return render_template('sign_up.html')
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        hushed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        with app.app_context():
+            user = User(username=form.username.data, email=form.email.data, password=hushed_password)
+            db.session.add(user)
+            db.session.commit()
+        return redirect(url_for('login'))
+    return render_template('sign_up.html', form=form, title="Register")
 
 @app.route('/home' , methods=[ 'GET', 'POST'])
 def home():
-   return render_template('home.html')
-
-
+   form = Mood_JournalForm()
+   if form.validate_on_submit():
+        return redirect(url_for('login'))
+   return render_template('home.html' , form=form)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    """if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        # Implement user authentication here
-        # If login is successful, set user session
-        return redirect(url_for('index'))"""
     return render_template('login.html')
 
 @app.route('/privacy', methods=['GET', 'POST'])
@@ -56,6 +45,11 @@ def privacy():
 @app.route('/terms', methods=['GET', 'POST'])
 def terms():
     return render_template('terms.html')
+
+@app.route('/save_mood_journal', methods=['POST'])
+def save_mood_journal():
+    if request.method == 'POST':
+        return redirect(url_for('home'))  
 
 
 if __name__ == '__main__':
