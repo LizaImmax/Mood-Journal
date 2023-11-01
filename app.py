@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
 
+
 app = Flask(__name__)
 # app.secret_key = 'your_secret_key'  # Change this to a secure secret key
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://username:password@localhost/dbname'  # Replace with your database connection details
@@ -47,6 +48,15 @@ def login():
         # If login is successful, set user session
         return redirect(url_for('index'))"""
     return render_template('login.html')
+
+@app.route('/privacy', methods=['GET', 'POST'])
+def privacy():
+    return render_template('privacy.html')
+
+@app.route('/terms', methods=['GET', 'POST'])
+def terms():
+    return render_template('terms.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
