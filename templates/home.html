@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h1>How are you feeling today?</h1>
+
+    <form action="/save_mood_journal" method="POST">
+        <div>
+            <label for="mood">Your Mood:</label>
+            <input type="text" id="mood" name="mood" required>
+        </div>
+        <div>
+            <label for="journal_entry">Journal Entry:</label>
+            <textarea id="journal_entry" name="journal_entry" rows="4" required></textarea>
+        </div>
+        <button type="submit">Save</button>
+    </form>
+{% endblock %}

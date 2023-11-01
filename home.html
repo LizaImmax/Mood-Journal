@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to the Mood Tracking and Journaling Web App</title>
+    
+</head>
+<body>
+    <header>
+        <h1>How are you feeling today?</h1>
+    </header>
+    <main>
+        <form action="/save_mood_journal" method="POST">
+            <div>
+                <label for="mood">Your Mood:</label>
+                <input type="text" id="mood" name="mood" required>
+            </div>
+            <div>
+                <label for="journal_entry">Journal Entry:</label>
+                <textarea id="journal_entry" name="journal_entry" rows="4" required></textarea>
+            </div>
+            <button type="submit">Save</button>
+        </form>
+    </main>
+    
+</body>
+</html>
