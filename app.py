@@ -1,7 +1,7 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import login_user, login_required, logout_user, current_user
-from basemodel import RegistrationForm, Mood_JournalForm
+from basemodel import RegistrationForm, Mood_JournalForm, LoginForm
 from config import app, db, bcrypt
 from models.mood_entry import MoodEntry
 from models.journal_entry import JournalEntry
@@ -19,13 +19,14 @@ def index():
 def sign_up():
     form = RegistrationForm()
     if form.validate_on_submit():
-        hushed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        with app.app_context():
-            user = User(username=form.username.data, email=form.email.data, password=hushed_password)
-            db.session.add(user)
-            db.session.commit()
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user = User(username=form.username.data, email=form.email.data, password=hashed_password)
+        db.session.add(user)
+        db.session.commit()
+        flash('Your account has been created! You can now log in.', 'success')
         return redirect(url_for('login'))
-    return render_template('sign_up.html', form=form, title="Register")
+    return render_template('sign_up.html', title='Register', form=form)
+
 
 @app.route('/home' , methods=[ 'GET', 'POST'])
 def home():
@@ -36,7 +37,16 @@ def home():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    return render_template('login.html')
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
+            login_user(user)
+            flash('Login successful!', 'success')
+            return redirect(url_for('account'))  # Redirect to the user's account page
+        else:
+            flash('Login unsuccessful. Please check your email and password.', 'error')
+    return render_template('login.html', title='Login', form=form)
 
 @app.route('/privacy', methods=['GET', 'POST'])
 def privacy():
@@ -49,7 +59,18 @@ def terms():
 @app.route('/save_mood_journal', methods=['POST'])
 def save_mood_journal():
     if request.method == 'POST':
-        return redirect(url_for('home'))  
+        return redirect(url_for('home'))
+    
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()  # Logs the user out
+    return redirect(url_for('login'))  # Redirect to the login page or any other desired page
+
+@app.route('/account')
+@login_required
+def account():
+    return render_template('account.html', title='Account')
 
 
 if __name__ == '__main__':

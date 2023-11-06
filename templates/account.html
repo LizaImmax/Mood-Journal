@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h2>Welcome to Your Account, {{ current_user.username }}!</h2>
+
+    <p>Your email: {{ current_user.email }}</p>
+
+    <h3>User Activity:</h3>
+    <p>Number of journal entries: {{ current_user.journal_entry_count }}</p>
+    <p>Last login: {{ current_user.last_login }}</p>
+    
+
+    <h3>Account Management Options:</h3>
+    <ul>
+        <li><a href="{{ url_for('write_journal_entry') }}">Write a Journal Entry</a></li>
+        <li><a href="{{ url_for('view_journal_entries') }}">View Journal Entries</a></li>
+        <li><a href="{{ url_for('change_password') }}">Change Password</a></li>
+    </ul>
+
+    <a href="{{ url_for('logout') }}">Logout</a>
+{% endblock %}

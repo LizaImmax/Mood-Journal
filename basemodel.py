@@ -58,4 +58,16 @@ class Mood_JournalForm(FlaskForm):
                         render_kw={"placeholder": "journal"}) 
     submit = SubmitField("Save")
 
+class LoginForm(FlaskForm):
+    """Login method from FlaskForm: validates and allows the user to log in
+
+    Args:
+        FlaskForm (_type_): _Flask Object to process user login_
+    """
+    email = StringField('Email', validators=[DataRequired(), Email()],
+                        render_kw={"placeholder": "email"})
+    password = PasswordField('Password', validators=[DataRequired()],
+                                    render_kw={"placeholder": "password"})
+    submit = SubmitField("Sign in")
+
 
