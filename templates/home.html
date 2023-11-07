@@ -1,24 +1,31 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <h1>How are you feeling today?</h1>
-
-    <form action="/save_mood_journal" method="POST">
-        <fieldset>
-            <div>
-                {{ form.mood.label(class="form-control-label") }}
-                {{ form.mood(class="form-control form-control-lg") }}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h1>Welcome to the Mood Tracking and Journaling Web App</h1>
+                <p>Start tracking your mood and journaling your thoughts to gain insight into your emotional well-being.</p>
             </div>
-            <div>
-                {{ form.journal.label(class="form-control-label") }}
-                {{ form.journal(class="form-control form-control-lg") }}
+            <div class="col-md-6">
+                <div class="quote">
+                    <blockquote class="blockquote">
+                        <p class="mb-0">"Your emotions are your compass; use them to navigate your life."</p>
+                        <footer class="blockquote-footer">Anonymous</footer>
+                    </blockquote>
+                </div>
+                <div class="quote">
+                    <blockquote class="blockquote">
+                        <p class="mb-0">"The first step to change is awareness. The second step is acceptance."</p>
+                        <footer class="blockquote-footer">Nathaniel Branden</footer>
+                    </blockquote>
+                </div>
+                <div class="text-center">
+                    <p>Already have an account? <a href="{{ url_for('login') }}" class="btn btn-primary">Log in</a></p>
+                    <p>Don't have an account? <a href="{{ url_for('sign_up') }}" class="btn btn-success">Sign up now</a></p>
+                </div>
             </div>
-
-        </fieldset>
-        
-        <div>
-            {{ form.submit(class="btn btn-outline-info") }}
         </div>
-        
-    </form>
+    </div>
 {% endblock %}
+

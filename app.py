@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import login_user, login_required, logout_user, current_user
 from basemodel import RegistrationForm, Mood_JournalForm, LoginForm
-from config import app, db, bcrypt
+from config import app, db, bcrypt, login_manager  
 from models.mood_entry import MoodEntry
 from models.journal_entry import JournalEntry
 from models.user import User
@@ -40,11 +40,16 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
+        app.logger.info(f"User: {user}")
+        app.logger.info(f"Form Email: {form.email.data}")
+        
         if user and bcrypt.check_password_hash(user.password, form.password.data):
+            app.logger.info("Password check: Success")
             login_user(user)
             flash('Login successful!', 'success')
             return redirect(url_for('account'))  # Redirect to the user's account page
         else:
+            app.logger.info("Password check: Failed")
             flash('Login unsuccessful. Please check your email and password.', 'error')
     return render_template('login.html', title='Login', form=form)
 
